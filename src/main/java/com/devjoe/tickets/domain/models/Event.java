@@ -37,7 +37,7 @@ public class Event {
 
 
     @Column(name = "venue", nullable = false)
-    private LocalDateTime venue;
+    private String venue;
 
 
     @Column(name = "sales_start")
