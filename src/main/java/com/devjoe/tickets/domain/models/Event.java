@@ -1,68 +1,71 @@
 package com.devjoe.tickets.domain.models;
 
+
 import com.devjoe.tickets.domain.EventStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.service.spi.InjectService;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
-@Builder
+@Entity
+@Table(name = "events")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "events")
-@Getter
-@Setter
-@Entity
+@Builder
 public class Event {
 
     @Id
-    @Column(name = "id", updatable = false, nullable = true)
+    @Column(name = "id", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
-
     private UUID id;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "start")
-    private LocalDateTime start;
+    @Column(name = "start_date", nullable = false)
+    private LocalDateTime startDate;
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return Objects.equals(id, event.id) && Objects.equals(name, event.name) && Objects.equals(start, event.start) && Objects.equals(end, event.end) && Objects.equals(venue, event.venue) && Objects.equals(salesStart, event.salesStart) && Objects.equals(saleEnd, event.saleEnd) && status == event.status && Objects.equals(localDateTime, event.localDateTime) && Objects.equals(updatedAt, event.updatedAt);
-    }
+    @Column(name = "end_date", nullable = false)
+    private LocalDateTime endDate;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, start, end, venue, salesStart, saleEnd, status, localDateTime, updatedAt);
-    }
-
-    @Column(name = "end")
-    private LocalDateTime end;
 
     @Column(name = "venue", nullable = false)
-    private String venue;
+    private LocalDateTime venue;
+
 
     @Column(name = "sales_start")
     private LocalDateTime salesStart;
 
     @Column(name = "sales_end")
-    private LocalDateTime saleEnd;
+    private LocalDateTime salesEnd;
 
     @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private EventStatus status;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizer_id")
     private User organizer;
+
+
+
+    @CreatedDate
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+
+    @LastModifiedBy
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updateAt;
+
 
 
     @ManyToMany(mappedBy = "attendingEvents")
@@ -72,18 +75,10 @@ public class Event {
     private List<User> staff = new ArrayList<>();
 
 
-
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    List<TicketType> ticketTypes = new ArrayList<>();
+    private List<TicketType> ticketTypes = new ArrayList<>();
 
 
-    @Column(name = "created_at", updatable = false, nullable = false)
-    private LocalDateTime localDateTime;
-
-    @LastModifiedBy
-    @Column(name = "updated_at", nullable = false)
-
-    private LocalDateTime updatedAt;
 
 
 
