@@ -23,5 +23,7 @@ public class CreateTicketTypeRequest {
     private String description;
 
 
+    @NotNull(message = "Total available ticket price is required")
+    @PositiveOrZero(message = "Total available should not be negative")
     private Integer totalAvailable;
 }
