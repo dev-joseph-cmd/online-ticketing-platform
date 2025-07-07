@@ -27,11 +27,11 @@ public class SecurityConfig {
 
 
                         ).addFilterAfter(userProvisioningFilters, BearerTokenAuthenticationFilter.class);
-
-
         return httpSecurity.build();
 
 
 
     }
 }
+
+
